@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator kysely {
+  provider = "prisma-kysely"
+  output   = "../app/server"
+  fileName = "db.types.ts"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum Audience {
+  friends
+  private
+  public
+}
+
+model PostTable {
+  id        String   @id @default(cuid())
+  audience  Audience
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String?
+
+  @@map("post")
+}
